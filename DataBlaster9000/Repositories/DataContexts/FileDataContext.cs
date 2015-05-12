@@ -10,36 +10,29 @@ namespace DataBlaster9000.Repositories.DataContexts
     {
         private const string FilePath = "/Files/";
 
-        private readonly FileDataModel _file;
-
-        public FileDataContext(FileDataModel file)
-        {
-            _file = file;
-        }
-
-        public FileDataModel LoadFile()
+        public FileDataModel LoadFile(FileDataModel file)
         {
             return new FileDataModel
             {
-                Uid = _file.Uid,
-                Lines = File.ReadAllLines(CsvFile()).ToList()    
+                Uid = file.Uid,
+                Lines = File.ReadAllLines(CsvFile(file)).ToList()    
             };
         }
 
-        public void WriteFile()
+        public void WriteFile(FileDataModel file)
         {
-            File.WriteAllText(CsvFile(), _file.Lines.ToCsv());
+            File.WriteAllText(CsvFile(file), file.Lines.ToCsv());
         }
 
-        public void ReplaceAllLines(IEnumerable<string> newLines)
+        public void ReplaceAllLines(IEnumerable<string> newLines, FileDataModel file)
         {
-            _file.Lines = newLines.ToList();
-            WriteFile();
+            file.Lines = newLines.ToList();
+            WriteFile(file);
         }
 
-        private string CsvFile()
+        private string CsvFile(FileDataModel file)
         {
-            return FilePath + _file.Uid + ".csv";
+            return FilePath + file.Uid + ".csv";
         }
     }
 }

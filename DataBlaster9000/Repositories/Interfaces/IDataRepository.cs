@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DataBlaster3000.Repositories.Interfaces
+namespace DataBlaster9000.Repositories.Interfaces
 {
     public interface IDataRepository<T> where T : class
     {

@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataBlaster3000.Extensions;
-using DataBlaster3000.Models;
-using DataBlaster3000.Repositories.DataContexts;
-using DataBlaster3000.Repositories.Interfaces;
+using DataBlaster9000.Models;
+using DataBlaster9000.Repositories.DataContexts;
+using DataBlaster9000.Repositories.Interfaces;
 
-namespace DataBlaster3000.Repositories
+namespace DataBlaster9000.Repositories
 {
     public class UserRepository : FileDataContext, IDataRepository<UserDataModel>
     {
-        private List<UserDataModel> _users; 
+        private List<UserDataModel> _users;
+        private FileDataModel _file;
 
-        public UserRepository(FileDataModel fileDataModel) : base (fileDataModel)
+        public UserRepository()
         {
-            _users = LoadFile().Lines.Select(s => new UserDataModel(s)).ToList();
+            _file = new FileDataModel
+            {
+                Lines = new List<string>(),
+                Uid = new Guid("14a149a8-1486-4f1d-9cb9-a9fc3f3cfea7")
+            };
+
+            _users = LoadFile(_file).Lines.Select(s => new UserDataModel(s)).ToList();
         }
 
         public void Add(UserDataModel user)
@@ -23,14 +29,14 @@ namespace DataBlaster3000.Repositories
             {
                 user.Id = _users.Max(u => u.Id) + 1;
                 _users.Add(user);
-                ReplaceAllLines(_users.Select(u => u.CsvRow).ToList());
+                ReplaceAllLines(_users.Select(u => u.CsvRow).ToList(), _file);
             }
         }
 
         public void Delete(UserDataModel user)
         {
             var keepUsers = _users.Where(u => u.Id != user.Id);
-            ReplaceAllLines(keepUsers.Select(u => u.CsvRow));
+            ReplaceAllLines(keepUsers.Select(u => u.CsvRow), _file);
         }
 
         public void Update(UserDataModel user)
@@ -44,7 +50,7 @@ namespace DataBlaster3000.Repositories
                 updateUser.LastName = user.LastName;
             }
 
-            ReplaceAllLines(_users.Select(u => u.CsvRow));
+            ReplaceAllLines(_users.Select(u => u.CsvRow), _file);
         }
 
         public IEnumerable<UserDataModel> All()

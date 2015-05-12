@@ -173,6 +173,7 @@
     <Compile Include="Repositories\DataContexts\FileDataContext.cs" />
     <Compile Include="Repositories\Interfaces\IDataRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Services\UsersService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
