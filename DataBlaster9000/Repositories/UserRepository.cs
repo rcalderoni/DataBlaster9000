@@ -20,7 +20,7 @@ namespace DataBlaster9000.Repositories
                 Uid = new Guid("14a149a8-1486-4f1d-9cb9-a9fc3f3cfea7")
             };
 
-            _users = LoadFile(_file).Lines.Select(s => new UserDataModel(s)).ToList();
+            _users = LoadFile(_file).Lines.Where(s => !s.StartsWith("ID")).Select(s => new UserDataModel(s)).ToList();
         }
 
         public void Add(UserDataModel user)

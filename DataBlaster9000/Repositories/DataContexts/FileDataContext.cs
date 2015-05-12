@@ -8,7 +8,7 @@ namespace DataBlaster9000.Repositories.DataContexts
 {
     public class FileDataContext
     {
-        private const string FilePath = "/Files/";
+        private const string FilePath = "/UserFiles/";
 
         public FileDataModel LoadFile(FileDataModel file)
         {
